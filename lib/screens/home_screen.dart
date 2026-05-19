@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kuliner_kita/theme/app_theme.dart';
 import 'package:kuliner_kita/screens/food_detail_screen.dart';
-
+import 'package:kuliner_kita/screens/explore_screen.dart';
+import 'package:kuliner_kita/screens/quiz_screen.dart';
+import 'package:kuliner_kita/screens/wheel_screen.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -12,7 +14,7 @@ class HomeScreen extends StatelessWidget {
     'rating': '4.9',
     'reviews': '2.1k',
     'tag': 'Pedas',
-    'img': 'https://www.themealdb.com/images/media/meals/bc3z651695747515.jpg',
+    'img': 'assets/images/rendang.jpg',
   },
   {
     'name': 'Gudeg Komplit',
@@ -20,7 +22,7 @@ class HomeScreen extends StatelessWidget {
     'rating': '4.8',
     'reviews': '1.5k',
     'tag': 'Manis',
-    'img': 'https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg',
+    'img': 'assets/images/gudeg.jpg',
   },
   {
     'name': 'Sate Ayam Madura',
@@ -28,7 +30,7 @@ class HomeScreen extends StatelessWidget {
     'rating': '4.7',
     'reviews': '34k',
     'tag': 'Pedas',
-    'img': 'https://www.themealdb.com/images/media/meals/sytuqu1511882485.jpg',
+    'img': 'assets/images/sateayam.jpg',
   },
 ];
 
@@ -84,11 +86,8 @@ class HomeScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12)),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Rendang_daging.jpg/100px-Rendang_daging.jpg',
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) =>
-                    const Icon(Icons.restaurant_menu, color: Colors.white),
+              child: Image.asset('assets/images/rendang.jpg',
+              fit: BoxFit.cover,
               ),
             ),
           ),
@@ -120,70 +119,105 @@ class HomeScreen extends StatelessWidget {
         ),
       );
 
-  Widget _buildFeatureCards(BuildContext context) => Row(
+       Widget _buildFeatureCards(BuildContext context) => Row(
         children: [
-          _featureCard(
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Peta_Indonesia.svg/320px-Peta_Indonesia.svg.png',
-            Icons.explore_rounded,
-            'Explore',
-            'Jelajahi peta kuliner nusantara',
-          ),
-          const SizedBox(width: 12),
-          _featureCard(
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/4/forty/Gudeg.jpg/100px-Gudeg.jpg',
-            Icons.quiz_rounded,
-            'Quiz',
-            'Uji ilmu masakmu',
-          ),
-          const SizedBox(width: 12),
-          _featureCard(
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/6/sixty/Sate_ayam_Madura.jpg/100px-Sate_ayam_Madura.jpg',
-            Icons.casino_rounded,
-            'Wheel',
-            'Bingung pilih menu?',
-          ),
-        ],
-      );
+            _featureCard(
+               context,
+               Icons.explore_rounded,
+               'Explore',
+               'Jelajahi peta kuliner nusantara',
+               const ExploreScreen(),
+               ),
+
+    const SizedBox(width: 12),
+    
+    _featureCard(
+      context,
+      Icons.quiz_rounded,
+      'Quiz',
+      'Uji ilmu masakmu',
+      const QuizScreen(),
+      ),
+
+    const SizedBox(width: 12),
+    
+     _featureCard(
+      context,
+      Icons.casino_rounded,
+      'Wheel',
+      'Bingung pilih menu?',
+      const WheelScreen(),
+      ),
+  ],
+);
 
   Widget _featureCard(
-          String imgUrl, IconData fallback, String title, String subtitle) =>
+  BuildContext context,
+  IconData fallback,
+  String title,
+  String subtitle,
+  Widget page,) =>
       Expanded(
-        child: Container(
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2))
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 36, height: 36,
-                decoration: BoxDecoration(
-                  color: AppTheme.primaryLight,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(fallback, color: AppTheme.primary, size: 20),
-              ),
-              const SizedBox(height: 8),
-              Text(title,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 13)),
-              const SizedBox(height: 4),
-              Text(subtitle,
-                  style: const TextStyle(
-                      color: AppTheme.textGrey, fontSize: 10),
-                  maxLines: 2),
-            ],
-          ),
+  child: GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => page,
         ),
       );
+    },
+    child: Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          )
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: AppTheme.primaryLight,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(
+              fallback,
+              color: AppTheme.primary,
+              size: 20,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            subtitle,
+            style: const TextStyle(
+              color: AppTheme.textGrey,
+              fontSize: 10,
+            ),
+            maxLines: 2,
+          ),
+        ],
+      ),
+    ),
+  ),
+      ); 
 
   Widget _buildRekomendasi(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,14 +268,9 @@ class HomeScreen extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Image.network(
+                Image.asset(
                   item['img']!,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
-                    color: Colors.orange[200],
-                    child: const Icon(Icons.restaurant,
-                        color: Colors.white, size: 48),
-                  ),
                 ),
                 // gradient overlay
                 Container(
@@ -319,18 +348,12 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      'https://www.themealdb.com/images/media/meals/g046bb1663960946.jpg',
-                      width: 80, height: 80,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(
-                        width: 80, height: 80,
-                        color: AppTheme.primaryLight,
-                        child: const Icon(Icons.soup_kitchen,
-                            color: AppTheme.primary, size: 40),
-                      ),
+                    child: Image.asset('assets/images/sambalulek.jpg',
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
                     ),
-                  ),
+                    ),
                   const SizedBox(width: 16),
                   const Expanded(
                     child: Column(
