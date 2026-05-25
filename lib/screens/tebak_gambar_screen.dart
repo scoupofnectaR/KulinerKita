@@ -2,18 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:kuliner_kita/theme/app_theme.dart';
 import 'package:kuliner_kita/score_manager.dart';
 
-class QuizQuestionScreen extends StatefulWidget {
-  const QuizQuestionScreen({super.key});
+class TebakGambarScreen extends StatefulWidget {
+  const TebakGambarScreen({super.key});
 
   @override
-  State<QuizQuestionScreen> createState() => _QuizQuestionScreenState();
+  State<TebakGambarScreen> createState() => _TebakGambarScreenState();
 }
 
-class _QuizQuestionScreenState extends State<QuizQuestionScreen>
+class _TebakGambarScreenState extends State<TebakGambarScreen>
     with SingleTickerProviderStateMixin {
-      
-      bool _scoreSaved = false;
-
   int _selected = -1;
   bool _answered = false;
   int _timeLeft = 15;
@@ -24,135 +21,124 @@ int score = 0;
 
 final List<Map<String, dynamic>> questions = [
   {
-  'question':
-      'Makanan khas Minangkabau yang dimasak lama dengan santan disebut?',
-  'image':
-      'assets/images/rendang.jpg',
-  'answers': [
-    'Gudeg',
-    'Rendang',
-    'Pempek',
-    'Sate'
-  ],
-  'correct': 1,
-},
-
-  {
-  'question':
-      'Gudeg berasal dari daerah mana?',
-  'image':
-      'assets/images/gudeg.jpg',
-  'answers': [
-    'Aceh',
-    'Palembang',
-    'Yogyakarta',
-    'Padang'
-  ],
-  'correct': 2,
-},
-
-  {
-    'question':
-        'Apa nama kuah khas pada Pempek?',
-        'image': 'assets/images/pempek.jpg',
+    'question': 'Makanan apa ini?',
+    'image': 'assets/images/bakso.jpg',
     'answers': [
-      'Cuko',
-      'Sambal',
-      'Kuah Kari',
-      'Saus Tomat'
+      'Bakso',
+      'Rawon',
+      'Pempek',
+      'Gudeg'
     ],
     'correct': 0,
   },
 
   {
-    'question':
-        'Bumbu khas yang membuat Arsik unik adalah?',
-        'image': 'assets/images/arsikikanmas.jpg',
+    'question': 'Makanan apa ini?',
+    'image': 'assets/images/gadogado.jpg',
     'answers': [
-      'Kencur',
-      'Andaliman',
-      'Keju',
-      'Santan'
+      'Ketoprak',
+      'Gado-Gado',
+      'Seblak',
+      'Bakso'
     ],
     'correct': 1,
   },
 
   {
-    'question':
-        'Sate Padang terkenal dengan?',
-    'image': 'assets/images/satepadang.jpg',
+    'question': 'Makanan apa ini?',
+    'image': 'assets/images/ketropak.jpg',
     'answers': [
-      'Kuah Kental',
-      'Keju',
-      'Mayones',
-      'Santan'
+      'Ketoprak',
+      'Sate',
+      'Gudeg',
+      'Bakso'
     ],
     'correct': 0,
   },
 
   {
-    'question':
-        'Mie Aceh terkenal dengan rasa?',
-    'image': 'assets/images/mieaceh.jpg',
+    'question': 'Makanan apa ini?',
+    'image': 'assets/images/rawon.jpg',
     'answers': [
-      'Asam',
-      'Manis',
-      'Kaya Rempah',
-      'Pahit'
-    ],
-    'correct': 2,
-  },
-
-  {
-    'question':
-        'Alat tradisional membuat Sambal Ulek adalah?',
-    'image': 'assets/images/sambalulek.jpg',
-    'answers': [
-      'Blender',
-      'Cobek & Ulekan',
-      'Panci',
-      'Oven'
+      'Bakso',
+      'Rawon',
+      'Soto Betawi',
+      'Seblak'
     ],
     'correct': 1,
   },
 
   {
-    'question':
-        'Nasi Minyak banyak dipengaruhi budaya?',
-    'image': 'assets/images/nasiminyak.jpg',
-    'answers': [
-      'Korea',
-      'Timur Tengah',
-      'Jepang',
-      'Thailand'
-    ],
-    'correct': 1,
-  },
-
-  {
-    'question':
-        'Gudeg identik dengan rasa?',
-    'image': 'assets/images/gudeg.jpg',
-    'answers': [
-      'Pedas',
-      'Asin',
-      'Manis',
-      'Asam'
-    ],
-    'correct': 2,
-  },
-
-  {
-    'question':
-        'Makanan khas Palembang adalah?',
-    'image': 'assets/images/pempek.jpg',
+    'question': 'Makanan apa ini?',
+    'image': 'assets/images/sotobetawi.jpg',
     'answers': [
       'Gudeg',
-      'Rendang',
-      'Pempek',
-      'Arsik'
+      'Soto Betawi',
+      'Mie Ayam',
+      'Pempek'
     ],
-    'correct': 2,
+    'correct': 1,
+  },
+
+  {
+    'question': 'Makanan apa ini?',
+    'image': 'assets/images/nasiuduk.jpg',
+    'answers': [
+      'Nasi Minyak',
+      'Nasi Uduk',
+      'Nasi Goreng',
+      'Gudeg'
+    ],
+    'correct': 1,
+  },
+
+  {
+    'question': 'Makanan apa ini?',
+    'image': 'assets/images/seblak.jpg',
+    'answers': [
+      'Seblak',
+      'Rawon',
+      'Bakso',
+      'Ketoprak'
+    ],
+    'correct': 0,
+  },
+
+  {
+    'question': 'Makanan apa ini?',
+    'image': 'assets/images/ayamgeprek.jpg',
+    'answers': [
+      'Ayam Geprek',
+      'Ayam Bakar',
+      'Rendang',
+      'Pempek'
+    ],
+    'correct': 0,
+  },
+
+  {
+    'question': 'Makanan apa ini?',
+    'image': 'assets/images/mieayam.jpg',
+    'answers': [
+      'Bakso',
+      'Mie Ayam',
+      'Mie Aceh',
+      'Ketoprak'
+    ],
+    'correct': 1,
+  },
+
+  {
+    'question': 'Makanan apa ini?',
+    'image':
+        'assets/images/martabaktelor.jpg',
+    'answers': [
+      'Martabak Telor',
+      'Seblak',
+      'Bakso',
+      'Rawon'
+    ],
+    'correct': 0,
   },
 ];
 
@@ -386,14 +372,17 @@ final List<Map<String, dynamic>> questions = [
                   fontWeight: FontWeight.bold)),
         ),
       );
+   
+  bool _scoreSaved = false;
 
-  void _showResultDialog() {
+void _showResultDialog() {
   if (!_scoreSaved) {
     ScoreManager.addScore(score);
     _scoreSaved = true;
   }
 
   showDialog(
+
     context: context,
     barrierDismissible: false,
     builder: (_) => AlertDialog(
