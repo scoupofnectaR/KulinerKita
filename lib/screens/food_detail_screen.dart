@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kuliner_kita/theme/app_theme.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:kuliner_kita/saved_food_manager.dart';
+
 
 class FoodDetailScreen extends StatefulWidget {
   final String name;
@@ -339,6 +342,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   int _tabIndex = 0;
   int _selectedQuiz = -1;
 bool _quizAnswered = false;
+bool isFavorite = false;
 
 
   final tabs = ['Tentang', 'Bahan Utama', 'Filosofi Budaya'];
@@ -346,6 +350,84 @@ Map<String, dynamic> get currentFood {
   return foodData[widget.name] ??
       foodData['Rendang Padang']!;
 }
+Future<void> _openYoutubeTutorial() async {
+  String youtubeUrl = '';
+
+  switch (widget.name) {
+    case 'Rendang Padang':
+      youtubeUrl = 'https://youtu.be/qdtflnUxCDs?si=t31egYwSY73NH-U3';
+      break;
+
+    case 'Gudeg Jogja':
+      youtubeUrl = 'https://youtu.be/iYzso0Jkhks?si=ZQOTyZZOaLlk1PNL';
+      break;
+    
+    case 'Gudeg Komplit':
+      youtubeUrl = 'https://youtu.be/iYzso0Jkhks?si=ZQOTyZZOaLlk1PNL';
+      break;
+    
+    case 'Sate Ayam Madura':
+      youtubeUrl = 'https://youtu.be/Vh__EYZzPwg?si=PuqM3tReqhv2Zi7D';
+      break;
+
+    case 'Bakso':
+      youtubeUrl = 'https://youtu.be/gqcRtvIFArA?si=eNak-Th1h3prKEMz';
+      break;
+
+    case 'Sate Ayam':
+      youtubeUrl = 'https://youtu.be/e5-WcIiO_rQ?si=7LwNi5_ED1kqc9xp';
+      break;
+
+    case 'Gado-Gado':
+      youtubeUrl = 'https://youtu.be/Z10XpoJBxUE?si=6pNNCpQxQqjAcO-i';
+      break;
+
+    case 'Nasi Goreng':
+      youtubeUrl = 'https://youtu.be/i6yHVLgrELQ?si=H0x8MsR_igdDCtZJ';
+      break;
+      
+    case 'Pempek Kapal Selam':
+      youtubeUrl = 'https://youtu.be/J8SVt3yiMBs?si=DNw-LkzFB6Z0g9vM';
+      break;
+    
+    case 'Mie Aceh Udang':
+      youtubeUrl = 'https://youtu.be/OGtn3u23Yjw?si=hBihzcCvsftkv5Nj';
+      break;
+    
+    case 'Sate Padang':
+      youtubeUrl = 'https://youtu.be/LWRIBEBRwuM?si=QZyT5jYZYXKEYOX4';
+      break;
+
+    case 'Ikan Mas Arsik':
+      youtubeUrl = 'https://youtu.be/AyQwzVwPhog?si=JPjHHYXCh_H-lytt';
+      break;
+
+    case 'Nasi Minyak':
+      youtubeUrl = 'https://youtu.be/VgxRqJEdSCg?si=edmEn1COglKv3eiD';
+      break;
+
+    
+    default:
+      youtubeUrl =
+          'https://youtu.be/qdtflnUxCDs?si=t31egYwSY73NH-U3';
+  }
+
+  final Uri url = Uri.parse(youtubeUrl);
+
+  await launchUrl(
+    url,
+    mode: LaunchMode.externalApplication,
+  );
+}
+
+@override
+void initState() {
+  super.initState();
+
+  isFavorite =
+      SavedFoodManager.isSaved(widget.name);
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -378,32 +460,74 @@ Map<String, dynamic> get currentFood {
   ),
 ),
 
-          Positioned(
-            top: 50, left: 16,
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Container(
-                width: 40, height: 40,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10)),
-                child: const Icon(Icons.arrow_back, size: 20),
-              ),
+  Positioned(
+  top: 50,
+  right: 16,
+  child: GestureDetector(
+    onTap: () {
+      setState(() {
+        isFavorite = !isFavorite;
+      });
+
+      if (isFavorite) {
+        SavedFoodManager.saveFood({
+          'name': widget.name,
+          'location':
+              currentFood['location'] ??
+              currentFood['origin'] ??
+              'Indonesia',
+
+          'image':
+              currentFood['image'] ??
+              widget.imageUrl,
+        });
+
+        print(
+            SavedFoodManager.savedFoods);
+
+        ScaffoldMessenger.of(context)
+            .showSnackBar(
+          SnackBar(
+            content: Text(
+              '${widget.name} disimpan ❤️',
             ),
           ),
-          Positioned(
-            top: 50, right: 16,
-            child: Container(
-              width: 40, height: 40,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10)),
-              child: const Icon(Icons.favorite_border,
-                  color: AppTheme.primary, size: 20),
+        );
+      } else {
+        SavedFoodManager.removeFood(
+          widget.name,
+        );
+
+        ScaffoldMessenger.of(context)
+            .showSnackBar(
+          SnackBar(
+            content: Text(
+              '${widget.name} dihapus',
             ),
           ),
+        );
+      }
+    },
+    child: Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius:
+            BorderRadius.circular(10),
+      ),
+      child: Icon(
+        isFavorite
+            ? Icons.favorite
+            : Icons.favorite_border,
+        color: AppTheme.primary,
+        size: 20,
+      ),
+    ),
+  ),
+),
         ],
-      );
+  );
 
   Widget _buildInfo() => Container(
         padding: const EdgeInsets.all(20),
@@ -698,7 +822,9 @@ Map<String, dynamic> get currentFood {
         child: SizedBox(
           width: double.infinity, height: 52,
           child: ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              _openYoutubeTutorial();
+              },
             icon: const Icon(Icons.play_arrow, color: Colors.white),
             label: const Text('Mulai Belajar Memasak',
                 style: TextStyle(
